@@ -1,26 +1,18 @@
-/* Real Person jQuery plugin styles v1.0.0 */
+/* Real Person jQuery plugin styles v1.0.1. */
 .realperson-challenge {
 	display: block;
 	color: #000;
-	font-size: 6px;
-	font-weight: bold;
-	line-height: 3px;
-	white-space: pre;
 }
 .realperson-text {
 	font-family: "Courier New",monospace;
+	font-size: 6px;
+	font-weight: bold;
 	letter-spacing: -1px;
+	line-height: 3px;
 }
 .realperson-regen {
-	width: 100%;
 	padding-top: 4px;
-	font-size: 200%;
-	font-weight: normal;
+	font-size: 12px;
 	text-align: center;
 	cursor: pointer;
-}
-@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0) { /* Opera only */
-	.realperson-regen {
-		font-size: 150%;
-	}
 }

@@ -1,5 +1,5 @@
 ﻿/* http://keith-wood.name/realPerson.html
-   Real Person Form Submission for jQuery v1.0.0.
+   Real Person Form Submission for jQuery v1.0.1.
    Written by Keith Wood (kwood{at}iinet.com.au) June 2009.
    Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
    MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses. 
@@ -120,9 +120,10 @@ $.extend(RealPerson.prototype, {
 		var html = '<div class="realperson-challenge"><div class="realperson-text">';
 		for (var i = 0; i < DOTS[0].length; i++) {
 			for (var j = 0; j < text.length; j++) {
-				html += DOTS[CHARS.indexOf(text.charAt(j))][i] + '  ';
+				html += DOTS[CHARS.indexOf(text.charAt(j))][i].replace(/ /g, '&nbsp;') +
+					'&nbsp;&nbsp;';
 			}
-			html += '\n';
+			html += '<br>';
 		}
 		html += '</div><div class="realperson-regen">' + inst.settings.regenerate +
 			'</div></div><input type="hidden" class="realperson-hash" name="' +
