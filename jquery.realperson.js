@@ -1,13 +1,11 @@
 ﻿/* http://keith-wood.name/realPerson.html
-   Real Person Form Submission for jQuery v1.0.1.
+   Real Person Form Submission for jQuery v1.1.0.
    Written by Keith Wood (kwood{at}iinet.com.au) June 2009.
    Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
    MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses. 
    Please attribute the author if you use it. */
 
 (function($) { // Hide scope, no $ conflict
-
-var PROP_NAME = 'realPerson';
 
 /* Real person manager. */
 function RealPerson() {
@@ -48,7 +46,7 @@ var DOTS = [
 	['*     *', ' *   * ', '  * *  ', '   *   ', '  * *  ', ' *   * ', '*     *'],
 	['*     *', ' *   * ', '  * *  ', '   *   ', '   *   ', '   *   ', '   *   '],
 	['*******', '     * ', '    *  ', '   *   ', '  *    ', ' *     ', '*******'],
-	['  ***  ', ' *   * ', '*     *', '*     *', '*     *', ' *   * ', '  ***  '],
+	['  ***  ', ' *   * ', '*   * *', '*  *  *', '* *   *', ' *   * ', '  ***  '],
 	['   *   ', '  **   ', ' * *   ', '   *   ', '   *   ', '   *   ', '*******'],
 	[' ***** ', '*     *', '      *', '     * ', '   **  ', ' **    ', '*******'],
 	[' ***** ', '*     *', '      *', '    ** ', '      *', '*     *', ' ***** '],
@@ -62,49 +60,58 @@ var DOTS = [
 $.extend(RealPerson.prototype, {
 	/* Class name added to elements to indicate already configured with real person. */
 	markerClassName: 'hasRealPerson',
+	/* Name of the data property for instance settings. */
+	propertyName: 'realperson',
 
 	/* Override the default settings for all real person instances.
-	   @param  settings  (object) the new settings to use as defaults
+	   @param  options  (object) the new settings to use as defaults
 	   @return  (RealPerson) this object */
-	setDefaults: function(settings) {
-		$.extend(this._defaults, settings || {});
+	setDefaults: function(options) {
+		$.extend(this._defaults, options || {});
 		return this;
 	},
 
 	/* Attach the real person functionality to an input field.
-	   @param  target    (element) the control to affect
-	   @param  settings  (object) the custom options for this instance */
-	_attachRealPerson: function(target, settings) {
+	   @param  target   (element) the control to affect
+	   @param  options  (object) the custom options for this instance */
+	_attachPlugin: function(target, options) {
 		target = $(target);
 		if (target.hasClass(this.markerClassName)) {
 			return;
 		}
-		target.addClass(this.markerClassName);
-		var inst = {settings: $.extend({}, this._defaults)};
-		$.data(target[0], PROP_NAME, inst);
-		this._changeRealPerson(target, settings);
+		var inst = {options: $.extend({}, this._defaults)};
+		target.addClass(this.markerClassName).data(this.propertyName, inst);
+		this._optionPlugin(target, options);
 	},
 
-	/* Reconfigure the settings for a real person control.
-	   @param  target    (element) the control to affect
-	   @param  settings  (object) the new options for this instance or
-	                     (string) an individual property name
-	   @param  value     (any) the individual property value (omit if settings is an object) */
-	_changeRealPerson: function(target, settings, value) {
+	/* Retrieve or reconfigure the settings for a control.
+	   @param  target   (element) the control to affect
+	   @param  options  (object) the new options for this instance or
+	                    (string) an individual property name
+	   @param  value    (any) the individual property value (omit if options
+	                    is an object or to retrieve the value of a setting)
+	   @return  (any) if retrieving a value */
+	_optionPlugin: function(target, options, value) {
 		target = $(target);
+		var inst = target.data(this.propertyName);
+		if (!options || (typeof options == 'string' && value == null)) { // Get option
+			var name = options;
+			options = (inst || {}).options;
+			return (options && name ? options[name] : options);
+		}
+
 		if (!target.hasClass(this.markerClassName)) {
 			return;
 		}
-		settings = settings || {};
-		if (typeof settings == 'string') {
-			var name = settings;
-			settings = {};
-			settings[name] = value;
+		options = options || {};
+		if (typeof options == 'string') {
+			var name = options;
+			options = {};
+			options[name] = value;
 		}
-		var inst = $.data(target[0], PROP_NAME);
-		$.extend(inst.settings, settings);
-		target.prevAll('.realperson-challenge,.realperson-hash').remove().end().
-			before(this._generateHTML(target, inst));
+		$.extend(inst.options, options);
+		target.prevAll('.' + this.propertyName + '-challenge,.' + this.propertyName + '-hash').
+			remove().end().before(this._generateHTML(target, inst));
 	},
 
 	/* Generate the additional content for this control.
@@ -113,11 +120,12 @@ $.extend(RealPerson.prototype, {
 	   @return  (string) the additional content */
 	_generateHTML: function(target, inst) {
 		var text = '';
-		for (var i = 0; i < inst.settings.length; i++) {
+		for (var i = 0; i < inst.options.length; i++) {
 			text += CHARS.charAt(Math.floor(Math.random() *
-				(inst.settings.includeNumbers ? 36 : 26)));
+				(inst.options.includeNumbers ? 36 : 26)));
 		}
-		var html = '<div class="realperson-challenge"><div class="realperson-text">';
+		var html = '<div class="' + this.propertyName + '-challenge">' +
+			'<div class="' + this.propertyName + '-text">';
 		for (var i = 0; i < DOTS[0].length; i++) {
 			for (var j = 0; j < text.length; j++) {
 				html += DOTS[CHARS.indexOf(text.charAt(j))][i].replace(/ /g, '&nbsp;') +
@@ -125,23 +133,45 @@ $.extend(RealPerson.prototype, {
 			}
 			html += '<br>';
 		}
-		html += '</div><div class="realperson-regen">' + inst.settings.regenerate +
-			'</div></div><input type="hidden" class="realperson-hash" name="' +
-			inst.settings.hashName.replace(/\{n\}/, target.attr('name')) +
+		html += '</div><div class="' + this.propertyName + '-regen">' + inst.options.regenerate +
+			'</div></div><input type="hidden" class="' + this.propertyName + '-hash" name="' +
+			inst.options.hashName.replace(/\{n\}/, target.attr('name')) +
 			'" value="' + this._hash(text) + '">';
 		return html;
 	},
 
-	/* Remove the real person functionality from a control.
+	/* Enable the plugin functionality for a control.
 	   @param  target  (element) the control to affect */
-	_destroyRealPerson: function(target) {
+	_enablePlugin: function(target) {
+		target = $(target);
+		if (!target.hasClass(this.markerClassName)) {
+			return;
+		}
+		target.removeClass(this.propertyName + '-disabled').prop('disabled', false).
+			prevAll('.' + this.propertyName + '-challenge').removeClass(this.propertyName + '-disabled');
+	},
+
+	/* Disable the plugin functionality for a control.
+	   @param  target  (element) the control to affect */
+	_disablePlugin: function(target) {
+		target = $(target);
+		if (!target.hasClass(this.markerClassName)) {
+			return;
+		}
+		target.addClass(this.propertyName + '-disabled').prop('disabled', true).
+			prevAll('.' + this.propertyName + '-challenge').addClass(this.propertyName + '-disabled');
+	},
+
+	/* Remove the plugin functionality from a control.
+	   @param  target  (element) the control to affect */
+	_destroyPlugin: function(target) {
 		target = $(target);
 		if (!target.hasClass(this.markerClassName)) {
 			return;
 		}
 		target.removeClass(this.markerClassName).
-			prevAll('.realperson-challenge,.realperson-hash').remove();
-		$.removeData(target[0], PROP_NAME);
+			removeData(this.propertyName).
+			prevAll('.' + this.propertyName + '-challenge,.' + this.propertyName + '-hash').remove();
 	},
 
 	/* Compute a hash value for the given text.
@@ -156,28 +186,51 @@ $.extend(RealPerson.prototype, {
 	}
 });
 
+// The list of commands that return values and don't permit chaining
+var getters = [''];
+
+/* Determine whether a command is a getter and doesn't permit chaining.
+   @param  command    (string, optional) the command to run
+   @param  otherArgs  ([], optional) any other arguments for the command
+   @return  true if the command is a getter, false if not */
+function isNotChained(command, otherArgs) {
+	if (command == 'option' && (otherArgs.length == 0 ||
+			(otherArgs.length == 1 && typeof otherArgs[0] == 'string'))) {
+		return true;
+	}
+	return $.inArray(command, getters) > -1;
+}
+
 /* Attach the real person functionality to a jQuery selection.
-   @param  command  (string) the command to run (optional, default 'attach')
-   @param  options  (object) the new settings to use for these instances (optional)
-   @return  (jQuery) for chaining further calls */
+   @param  options  (object) the new settings to use for these instances (optional) or
+                    (string) the command to run (optional)
+   @return  (jQuery) for chaining further calls or
+            (any) getter value */
 $.fn.realperson = function(options) {
 	var otherArgs = Array.prototype.slice.call(arguments, 1);
+	if (isNotChained(options, otherArgs)) {
+		return plugin['_' + options + 'Plugin'].apply(plugin, [this[0]].concat(otherArgs));
+	}
 	return this.each(function() {
 		if (typeof options == 'string') {
-			$.realperson['_' + options + 'RealPerson'].
-				apply($.realperson, [this].concat(otherArgs));
+			if (!plugin['_' + options + 'Plugin']) {
+				throw 'Unknown command: ' + options;
+			}
+			plugin['_' + options + 'Plugin'].apply(plugin, [this].concat(otherArgs));
 		}
 		else {
-			$.realperson._attachRealPerson(this, options || {});
+			plugin._attachPlugin(this, options || {});
 		}
 	});
 };
 
 /* Initialise the real person functionality. */
-$.realperson = new RealPerson(); // singleton instance
+var plugin = $.realperson = new RealPerson(); // Singleton instance
 
-$('.realperson-challenge').live('click', function() {
-	$(this).next().next().realperson('change');
+$('div.' + plugin.propertyName + '-challenge').live('click', function() {
+	if (!$(this).hasClass(plugin.propertyName + '-disabled')) {
+		$(this).nextAll('.' + plugin.markerClassName).realperson('option', {});
+	}
 });
 
 })(jQuery);

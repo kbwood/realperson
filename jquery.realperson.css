@@ -1,4 +1,4 @@
-/* Real Person jQuery plugin styles v1.0.1. */
+/* Real Person jQuery plugin styles v1.1.0. */
 .realperson-challenge {
 	display: block;
 	color: #000;
@@ -15,4 +15,11 @@
 	font-size: 12px;
 	text-align: center;
 	cursor: pointer;
+}
+.realperson-disabled {
+	opacity: 0.5;
+	filter: Alpha(Opacity=50);
+}
+.realperson-disabled .realperson-regen {
+	cursor: default;
 }
