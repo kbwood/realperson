@@ -1,0 +1,35 @@
+{
+	"name": "kbw.realperson",
+	"title": "jQuery Real Person",
+	"description": "This plugin enhances an input field to help reduce automated form submission. * Server-side scripts for PHP, Java, C#, ColdFusion.",
+	"keywords": [
+		"captcha",
+		"ui",
+		"validation"
+	],
+	"version": "1.1.1",
+	"author": {
+		"name": "Keith Wood",
+		"url": "http://keith-wood.name/"
+	},
+	"maintainers": [
+		{
+			"name": "Keith Wood",
+			"email": "kbwood@iinet.com.au",
+			"url": "http://keith-wood.name/"
+		}
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt"
+		}
+	],
+	"bugs": "https://github.com/kbwood/realperson/issues",
+	"homepage": "http://keith-wood.name/realPerson.html",
+	"docs": "http://keith-wood.name/realPersonRef.html",
+	"download": "http://keith-wood.name/realPerson.html",
+	"dependencies": {
+		"jquery": ">=1.7"
+	}
+}

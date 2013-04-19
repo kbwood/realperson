@@ -1,8 +1,7 @@
 ﻿/* http://keith-wood.name/realPerson.html
-   Real Person Form Submission for jQuery v1.1.0.
+   Real Person Form Submission for jQuery v1.1.1.
    Written by Keith Wood (kwood{at}iinet.com.au) June 2009.
-   Dual licensed under the GPL (http://dev.jquery.com/browser/trunk/jquery/GPL-LICENSE.txt) and 
-   MIT (http://dev.jquery.com/browser/trunk/jquery/MIT-LICENSE.txt) licenses. 
+   Available under the MIT (https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt) license. 
    Please attribute the author if you use it. */
 
 (function($) { // Hide scope, no $ conflict
@@ -227,7 +226,7 @@ $.fn.realperson = function(options) {
 /* Initialise the real person functionality. */
 var plugin = $.realperson = new RealPerson(); // Singleton instance
 
-$('div.' + plugin.propertyName + '-challenge').live('click', function() {
+$(document).on('click', 'div.' + plugin.propertyName + '-challenge', function() {
 	if (!$(this).hasClass(plugin.propertyName + '-disabled')) {
 		$(this).nextAll('.' + plugin.markerClassName).realperson('option', {});
 	}
