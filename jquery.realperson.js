@@ -133,7 +133,9 @@ $.extend(RealPerson.prototype, {
 			html += '<br>';
 		}
 		html += '</div><div class="' + this.propertyName + '-regen">' + inst.options.regenerate +
-			'</div></div><input type="hidden" class="' + this.propertyName + '-hash" name="' +
+			'</div></div><input type="hidden" class="' + this.propertyName + '-hash" id="' +
+			inst.options.hashName.replace(/\{n\}/, target.attr('name')) +
+			'" name="' +
 			inst.options.hashName.replace(/\{n\}/, target.attr('name')) +
 			'" value="' + this._hash(text) + '">';
 		return html;
