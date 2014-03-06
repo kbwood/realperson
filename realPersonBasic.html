@@ -12,7 +12,10 @@ label { display: inline-block; width: 20%; }
 <script type="text/javascript" src="jquery.realperson.js"></script>
 <script type="text/javascript">
 $(function() {
-	$('#defaultReal').realperson();
+	$('#defaultReal').realperson({
+		placeholder: '#captchaPlaceholder',
+		length: 7
+	});
 });
 </script>
 </head>
@@ -26,8 +29,16 @@ $(function() {
 	documentation reference</a> page.</p>
 <form action="http://keith-wood.name/realPerson.php" method="post">
 	<p><label>Other fields:</label><input type="text" id="field"></p>
-	<p><label>Please enter the letters displayed:</label>
-		<input type="text" id="defaultReal" name="defaultReal"></p>
+	<table cellpadding="5">
+		<tr>
+			<td>&nbsp;</td>
+			<td id="captchaPlaceholder"></td>
+		<tr>
+		<tr>
+			<td nowrap><label>Please enter the letters displayed:</label></td>
+			<td><input type="text" id="defaultReal" name="defaultReal"></td>
+		</tr>
+	</table>
 	<p style="clear: both;"><label>&nbsp;</label><input type="submit" value="Submit"></p>
 </form>
 </body>

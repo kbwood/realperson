@@ -9,6 +9,7 @@
 /* Real person manager. */
 function RealPerson() {
 	this._defaults = {
+		placeholder: null, // CAPTCHA container element (selector)
 		length: 6, // Number of characters to use
 		includeNumbers: false, // True to use numbers as well as letters
 		regenerate: 'Click to change', // Instruction text to regenerate
@@ -109,8 +110,14 @@ $.extend(RealPerson.prototype, {
 			options[name] = value;
 		}
 		$.extend(inst.options, options);
-		target.prevAll('.' + this.propertyName + '-challenge,.' + this.propertyName + '-hash').
-			remove().end().before(this._generateHTML(target, inst));
+		if (inst.options.placeholder == null) {
+			target.prevAll('.' + this.propertyName + '-challenge,.' + this.propertyName + '-hash').
+				remove().end().before(this._generateHTML(target, inst));
+		} else {
+			var placeholder = inst.options.placeholder;
+			$(placeholder).html(this._generateHTML(target, inst));
+			$(placeholder + ' > .' + this.propertyName + '-challenge').data('target-input', target);
+		}
 	},
 
 	/* Generate the additional content for this control.
@@ -228,7 +235,12 @@ var plugin = $.realperson = new RealPerson(); // Singleton instance
 
 $(document).on('click', 'div.' + plugin.propertyName + '-challenge', function() {
 	if (!$(this).hasClass(plugin.propertyName + '-disabled')) {
-		$(this).nextAll('.' + plugin.markerClassName).realperson('option', {});
+		var targetInput = $(this).data('target-input');
+		if (targetInput && targetInput.length > 0) {
+			targetInput.realperson('option', {});
+		} else {
+			$(this).nextAll('.' + plugin.markerClassName).realperson('option', {});
+		}
 	}
 });
 
