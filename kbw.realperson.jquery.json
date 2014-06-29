@@ -1,13 +1,13 @@
 {
 	"name": "kbw.realperson",
 	"title": "jQuery Real Person",
-	"description": "This plugin enhances an input field to help reduce automated form submission. * Server-side scripts for PHP, Java, C#, ColdFusion.",
+	"description": "This plugin enhances an input field to help reduce automated form submission. * Server-side scripts for PHP, Java, C#, ColdFusion, Rails, Python.",
 	"keywords": [
 		"captcha",
 		"ui",
 		"validation"
 	],
-	"version": "1.1.1",
+	"version": "2.0.0",
 	"author": {
 		"name": "Keith Wood",
 		"url": "http://keith-wood.name/"
