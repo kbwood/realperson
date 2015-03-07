@@ -1,10 +1,10 @@
-/* Real Person jQuery plugin styles v2.0.0. */
+/* Real Person jQuery plugin styles v2.0.1. */
 .realperson-challenge {
 	display: block;
 	color: #000;
 }
 .realperson-text {
-	font-family: "Courier New",monospace;
+	font-family: "Courier New",monospace !important;
 	font-size: 6px;
 	font-weight: bold;
 	letter-spacing: -1px;

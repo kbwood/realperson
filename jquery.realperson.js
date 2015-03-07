@@ -1,7 +1,7 @@
 ﻿/* http://keith-wood.name/realPerson.html
-   Real Person Form Submission for jQuery v2.0.0.
+   Real Person Form Submission for jQuery v2.0.1.
    Written by Keith Wood (kwood{at}iinet.com.au) June 2009.
-   Available under the MIT (https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt) license. 
+   Available under the MIT (http://keith-wood.name/licence.html) license. 
    Please attribute the author if you use it. */
 
 (function($) { // Hide scope, no $ conflict
@@ -91,6 +91,8 @@
 			dots: DOTS,
 			chars: ALPHABETIC
 		},
+		
+		_getters: ['getHash'],
 
 		_challengeClass: pluginName + '-challenge',
 		_disabledClass: pluginName + '-disabled',
@@ -104,6 +106,7 @@
 			for (var i = 0; i < inst.options.length; i++) {
 				text += inst.options.chars.charAt(Math.floor(Math.random() * inst.options.chars.length));
 			}
+			inst.hash = hash(text + salt);
 			var self = this;
 			elem.closest('form').off('.' + inst.name).
 				on('submit.' + inst.name, function() {
@@ -120,7 +123,7 @@
 				before(this._generateHTML(inst, text)).
 				prevAll('div.' + this._challengeClass).click(function() {
 					if (!$(this).hasClass(self._disabledClass)) {
-						$(this).nextAll('.' + self._getMarker()).realperson('option', {});
+						elem.realperson('option', {});
 					}
 				});
 		},
@@ -146,7 +149,15 @@
 			elem.addClass(this._disabledClass).prop('disabled', true).
 				prevAll('.' + this._challengeClass).addClass(this._disabledClass);
 		},
-			
+		
+		/* Retrieve the hash value.
+		   @param elem {Element} The control with the hash.
+		   @return {number} The hash value. */
+		getHash: function(elem) {
+			var inst = this._getInst(elem);
+			return inst ? inst.hash : 0;
+		},
+		
 		/* Generate the additional content for this control.
 		   @param inst {object} The current instance settings.
 		   @param text {string} The text to display.
@@ -157,8 +168,8 @@
 			for (var i = 0; i < inst.options.dots[0].length; i++) {
 				for (var j = 0; j < text.length; j++) {
 					html += inst.options.dots[inst.options.chars.indexOf(text.charAt(j))][i].
-						replace(/ /g, '&nbsp;').replace(/\*/g, inst.options.dot) +
-						'&nbsp;&nbsp;';
+						replace(/ /g, '&#160;').replace(/\*/g, inst.options.dot) +
+						'&#160;&#160;';
 				}
 				html += '<br>';
 			}

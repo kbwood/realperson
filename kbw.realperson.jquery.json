@@ -7,7 +7,7 @@
 		"ui",
 		"validation"
 	],
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"author": {
 		"name": "Keith Wood",
 		"url": "http://keith-wood.name/"
@@ -22,7 +22,7 @@
 	"licenses": [
 		{
 			"type": "MIT",
-			"url": "https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt"
+			"url": "http://keith-wood.name/licence.htmlt"
 		}
 	],
 	"bugs": "https://github.com/kbwood/realperson/issues",
