@@ -10,6 +10,13 @@
 	letter-spacing: -1px;
 	line-height: 3px;
 }
+
+/* for chrome */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+   .realperson-text {
+   	letter-spacing: -4px;
+   }
+}
 .realperson-regen {
 	padding-top: 4px;
 	font-size: 12px;
