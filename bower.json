@@ -21,7 +21,7 @@
     "jquery.realperson-*.js",
     "jquery.*.min.js"
   ],
-  "dependencies": [
+  "dependencies": {
     "jquery": ">=1.7"
-  ]
+  }
 }
